@@ -13076,6 +13076,180 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">import</span> <span class="nn">random</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Tropical</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">e</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
+    
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">e</span><span class="p">:</span>
+            <span class="n">n1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">+</span><span class="n">other</span><span class="o">.</span><span class="n">n</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">e</span><span class="p">:</span>
+            <span class="n">n1</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">n</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">e</span><span class="p">:</span>
+            <span class="n">n1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="k">return</span> <span class="n">Tropical</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span><span class="n">other</span><span class="o">.</span><span class="n">e</span><span class="p">),</span><span class="n">n1</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Tropical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="o">+</span><span class="n">other</span><span class="o">.</span><span class="n">e</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Tropical(</span><span class="si">%d</span><span class="s2">,</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Tropical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="o">-</span><span class="n">other</span><span class="o">.</span><span class="n">e</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">-</span><span class="n">other</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">oinsum</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="o">*</span><span class="n">arrays</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;A ``einsum`` implementation for ``numpy`` object arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lhs</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">eq</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">)</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">lhs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+
+    <span class="n">sizes</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">array</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">arrays</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
+            <span class="n">sizes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span>
+
+    <span class="n">out_size</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">output</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">out_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span> <span class="c1"># malloc</span>
+
+    <span class="n">inner</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">sizes</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">output</span><span class="p">]</span>
+    <span class="n">inner_size</span> <span class="o">=</span> <span class="p">[</span><span class="n">sizes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">inner</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">coo_o</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndindex</span><span class="p">(</span><span class="o">*</span><span class="n">out_size</span><span class="p">):</span>
+
+        <span class="n">coord</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">coo_o</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">gen_inner_sum</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">coo_i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndindex</span><span class="p">(</span><span class="o">*</span><span class="n">inner_size</span><span class="p">):</span>
+                <span class="n">coord</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">inner</span><span class="p">,</span> <span class="n">coo_i</span><span class="p">)))</span>
+
+                <span class="n">locs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">coord</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">term</span><span class="p">)</span> <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">]</span>
+                <span class="n">elements</span> <span class="o">=</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">loc</span><span class="p">]</span> <span class="k">for</span> <span class="n">array</span><span class="p">,</span> <span class="n">loc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="n">locs</span><span class="p">))</span>
+                <span class="k">yield</span> <span class="n">functools</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="n">elements</span><span class="p">)</span>
+
+        <span class="n">out</span><span class="p">[</span><span class="n">coo_o</span><span class="p">]</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">add</span><span class="p">,</span> <span class="n">gen_inner_sum</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">Eigen</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A method to calculate the energy density of 1D Ising chain</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># Error</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Total run time</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Tropical</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span><span class="mi">1</span><span class="p">),</span><span class="n">Tropical</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span><span class="mi">1</span><span class="p">)])</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">Tropical</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Tropical</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+                  <span class="p">[</span><span class="n">Tropical</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Tropical</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">lamb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">flag</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">count</span><span class="o">&lt;=</span><span class="n">N</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;phi = [</span><span class="si">%f</span><span class="s2">,</span><span class="si">%f</span><span class="s2">]&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">e</span><span class="p">,</span><span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">e</span><span class="p">))</span>
+    
+        <span class="n">phi1</span> <span class="o">=</span> <span class="n">B</span><span class="nd">@phi</span>
+        <span class="n">lamb1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">phi1</span><span class="p">)</span>
+        <span class="n">phi1</span> <span class="o">=</span> <span class="n">phi1</span><span class="o">/</span><span class="n">lamb1</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">lamb1</span><span class="o">.</span><span class="n">e</span><span class="o">-</span><span class="n">lamb</span><span class="o">.</span><span class="n">e</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">lamb</span><span class="o">.</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">error</span><span class="o">&lt;=</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">phi1</span>
+            <span class="n">lamb</span> <span class="o">=</span> <span class="n">lamb1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> time: Error = </span><span class="si">%f</span><span class="s2">, lambda = </span><span class="si">%f</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="n">error</span><span class="p">,</span><span class="n">lamb1</span><span class="o">.</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;lambda = </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">lamb1</span><span class="o">.</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">return</span> <span class="mi">0</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">Eigen</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>phi = [0.928864,0.228423]
+0 time: Error = 4.377847, lambda = -0.771577
+phi = [0.000000,0.700441]
+1 time: Error = 0.296047, lambda = -1.000000
+phi = [0.700441,0.000000]
+2 time: Error = 0.000000, lambda = -1.000000
+lambda = -1.000000
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
